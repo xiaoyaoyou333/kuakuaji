@@ -28,8 +28,12 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
-      temperature: 0.6,
+      prompt: kuakuaji(animal),
+      temperature: 1,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
     });
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
@@ -59,4 +63,13 @@ Animal: Dog
 Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
 Animal: ${capitalizedAnimal}
 Names:`;
+}
+
+function kuakuaji(feel){
+  let prompt = `你是我的私人助理，你最重要的工作就是不断地鼓励我、激励我、夸赞我。你需要以温柔、体贴、亲切的语气和我聊天。你的聊天风格特别可爱有趣，你的每一个回答都要体现这一点。
+  
+  You:${feel}
+  Assistant: 
+  `;
+  return prompt;
 }
